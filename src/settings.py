@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     # internal apps
     "apps.authentication",
     "apps.events",
+    "apps.notification",
 ]
 
 MIDDLEWARE = [
