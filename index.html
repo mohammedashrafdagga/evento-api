@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        <script>
+            // Replace with your WebSocket URL
+            const socket = new WebSocket("ws://" + window.location.host + "/ws/notifications/");
+
+            // On successful connection
+            socket.onopen = function () {
+                console.log("Connected to WebSocket");
+            };
+
+            // On receiving a message
+            socket.onmessage = function (event) {
+                const data = JSON.parse(event.data);
+                console.log("Received notification:", data.notifications);
+                updateNotificationsUI(data.notifications);
+            };
+
+            // On connection closeuvicorm 
+            socket.onclose = function () {
+                console.log("WebSocket connection closed");
+            };
+
+            // On error
+            socket.onerror = function (error) {
+                console.error("WebSocket error:", error);
+            };
+
+            // Function to update the UI with new notifications
+            function updateNotificationsUI(notifications) {
+                const notificationsList = document.getElementById("notifications-list");
+                notifications.forEach((notification) => {
+                    const li = document.createElement("li");
+                    li.textContent = notification.message;
+                    notificationsList.appendChild(li);
+                });
+            }
+        </script>
+    </body>
+</html>

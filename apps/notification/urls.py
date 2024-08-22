@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import UserNotificationListAPIView, MarkNotificationAsReadView
 
+
 app_name = "notification-app"
 
 

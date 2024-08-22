@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     # external library
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
+    "channels",
     # internal apps
     "apps.authentication",
     "apps.events",
@@ -69,7 +70,14 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "src.wsgi.application"
+
+ASGI_APPLICATION = "src.asgi.application"
+
+
+# adding channels-redis
+CHANNEL_LAYERS = {
+    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
+}
 
 
 # Database
