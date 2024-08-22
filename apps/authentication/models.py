@@ -3,6 +3,10 @@ from django.db import models
 
 
 class User(AbstractUser):
+    class UserType(models.TextChoices):
+        HOSTING = "hosting", "Hosting"
+        NORMAL = "normal", "Normal User"
+
     dob = models.DateField(null=True, blank=True)
     sex = models.CharField(
         max_length=10, choices=[("M", "Male"), ("F", "Female")], null=True, blank=True
@@ -12,6 +16,9 @@ class User(AbstractUser):
         upload_to="profile_images/", null=True, blank=True
     )
     email = models.EmailField(unique=True)
+    user_type = models.CharField(
+        max_length=10, choices=UserType.choices, default=UserType.NORMAL
+    )
 
     def __str__(self):
         return f"{self.username}"
