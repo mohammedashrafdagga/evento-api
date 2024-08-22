@@ -88,10 +88,12 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "last_name",
             "dob",
             "sex",
+            "user_type",
             "country",
             "profile_image",
         ]
         extra_kwargs = {
             "username": {"read_only": True},  # Prevent username from being updated
             "email": {"read_only": True},  # Prevent email from being updated if needed
+            "user_type": {"read_only": True},
         }

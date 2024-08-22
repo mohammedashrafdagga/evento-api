@@ -8,13 +8,9 @@ class UserAdmin(BaseUserAdmin):
     # Fields to be displayed in the list view of the admin panel
     list_display = (
         "email",
-        "username",
         "first_name",
         "last_name",
-        "dob",
-        "sex",
         "country",
-        "profile_image",
         "is_staff",
         "is_active",
     )
@@ -32,6 +28,7 @@ class UserAdmin(BaseUserAdmin):
                     "email",
                     "dob",
                     "sex",
+                    "user_type",
                     "country",
                     "profile_image",
                 )
@@ -66,6 +63,7 @@ class UserAdmin(BaseUserAdmin):
                     "password",
                     "dob",
                     "sex",
+                    "user_type",
                     "country",
                     "profile_image",
                 ),

@@ -3,7 +3,7 @@ from .views import UserRegistrationView, ChangePasswordView, UserProfileView, Lo
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
-app_name = "auth"
+app_name = "auth-app"
 urlpatterns = [
     path("register/", UserRegistrationView.as_view(), name="register"),
     path("login/", TokenObtainPairView.as_view(), name="login"),
