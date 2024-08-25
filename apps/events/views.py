@@ -5,9 +5,10 @@ from .permissions import IsHostingUserPermission, OwnerEventPermissions
 from .models import Event, Section
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-
+from drf_spectacular.utils import extend_schema
 
 # Create your views here.
+@extend_schema(tags=["Events"])
 class EventCreateAPIView(generics.CreateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -15,12 +16,14 @@ class EventCreateAPIView(generics.CreateAPIView):
 
 
 # List Event API View
+@extend_schema(tags=["Events"])
 class EventListAPIView(generics.ListAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
 
 
 # Detail for events
+@extend_schema(tags=["Events"])
 class EventRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSectionSerializer
@@ -28,6 +31,7 @@ class EventRetrieveAPIView(generics.RetrieveAPIView):
 
 
 # update Events Sections
+@extend_schema(tags=["Events"])
 class EventUpdateAPIView(generics.UpdateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -35,6 +39,7 @@ class EventUpdateAPIView(generics.UpdateAPIView):
 
 
 # Create Section
+@extend_schema(tags=["Events"])
 class SectionCreateAPIView(generics.CreateAPIView):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
@@ -48,6 +53,7 @@ class SectionCreateAPIView(generics.CreateAPIView):
 
 
 # Detail Event
+@extend_schema(tags=["Events"])
 class SectionDetailAPIView(generics.RetrieveAPIView):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
@@ -55,6 +61,7 @@ class SectionDetailAPIView(generics.RetrieveAPIView):
 
 
 # Update Section
+@extend_schema(tags=["Events"])
 class SectionUpdateAPIView(generics.UpdateAPIView):
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
@@ -66,11 +73,13 @@ class SectionUpdateAPIView(generics.UpdateAPIView):
 
 
 # Destroy Event
+@extend_schema(tags=["Events"])
 class SectionDestroyAPIView(SectionUpdateAPIView, generics.DestroyAPIView):
     pass
 
 
 # Allow to User Join Event as Participant
+@extend_schema(tags=["Events"])
 class JoinEventView(generics.GenericAPIView):
     queryset = Event.objects.all()
     permission_classes = [IsAuthenticated]
