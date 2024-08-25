@@ -2,46 +2,53 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
+        <title>Notification Test</title>
     </head>
     <body>
-        <script>
-            // Replace with your WebSocket URL
-            const socket = new WebSocket("ws://" + window.location.host + "/ws/notifications/");
+        <h1>User Notifications</h1>
+        <ul id="notifications-list"></ul>
 
-            // On successful connection
+        <script>
+            // Replace with the actual user_id and token
+            let currentNotifications = [];
+            const userId = "5"; // Example user ID
+            const urlSocket = `ws://127.0.0.1:8000/ws/notifications/${userId}/`;
+            const socket = new WebSocket(urlSocket);
             socket.onopen = function () {
-                console.log("Connected to WebSocket");
+                console.log("WebSocket connected");
             };
 
-            // On receiving a message
             socket.onmessage = function (event) {
                 const data = JSON.parse(event.data);
-                console.log("Received notification:", data.notifications);
-                updateNotificationsUI(data.notifications);
-            };
 
-            // On connection closeuvicorm 
+                // Determine if the data is a single notification or a list
+                const notifications = Array.isArray(data) ? data : [data];
+
+                // Update the current notifications list
+                currentNotifications = currentNotifications.concat(notifications);
+
+                // Render all notifications
+                renderNotifications();
+            };
+            function renderNotifications() {
+                const notificationsList = document.getElementById("notifications-list");
+                notificationsList.innerHTML = ""; // Clear the list before updating
+
+                // Display all notifications
+                currentNotifications.forEach((notification) => {
+                    const li = document.createElement("li");
+                    li.textContent = `${notification.message} (${notification.notification_type})`;
+                    notificationsList.appendChild(li);
+                });
+            }
             socket.onclose = function () {
                 console.log("WebSocket connection closed");
             };
 
-            // On error
             socket.onerror = function (error) {
                 console.error("WebSocket error:", error);
             };
-
-            // Function to update the UI with new notifications
-            function updateNotificationsUI(notifications) {
-                const notificationsList = document.getElementById("notifications-list");
-                notifications.forEach((notification) => {
-                    const li = document.createElement("li");
-                    li.textContent = notification.message;
-                    notificationsList.appendChild(li);
-                });
-            }
         </script>
     </body>
 </html>

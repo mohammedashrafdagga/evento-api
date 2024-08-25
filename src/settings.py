@@ -20,7 +20,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -35,8 +35,8 @@ INSTALLED_APPS = [
     # external library
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
-    "channels",
     "drf_spectacular",
+    "channels",
     # internal apps
     "apps.authentication",
     "apps.events",
@@ -71,14 +71,12 @@ TEMPLATES = [
     },
 ]
 
+# Change Auth Model
+AUTH_USER_MODEL = "authentication.User"
 
+
+# WSGI_APPLICATION = "src.wsgi.application"
 ASGI_APPLICATION = "src.asgi.application"
-
-
-# adding channels-redis
-CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
-}
 
 
 # Database
@@ -137,8 +135,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Change Auth Model
-AUTH_USER_MODEL = "authentication.User"
+
+# adding channels-redis
+CHANNEL_LAYERS = {
+    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
+}
 
 
 REST_FRAMEWORK = {
@@ -163,5 +164,6 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "Building API for Event System Management",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
     # OTHER SETTINGS
 }

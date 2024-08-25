@@ -6,8 +6,10 @@ from rest_framework.exceptions import NotFound
 from .permissions import OwnerNotificationPermissions
 from rest_framework import status
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 # list notifications for user have
+@extend_schema(tags=["Notifications"])
 class UserNotificationListAPIView(ListAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
@@ -19,6 +21,7 @@ class UserNotificationListAPIView(ListAPIView):
         )
 
 
+@extend_schema(tags=["Notifications"])
 class MarkNotificationAsReadView(UpdateAPIView):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer

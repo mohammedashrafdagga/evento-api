@@ -9,8 +9,22 @@ from .serializers import (
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+
+@extend_schema(tags=["Users"])
+class CustomLoginAPIView(TokenObtainPairView):
+    pass
+
+
+@extend_schema(tags=["Users"])
+class CustomRefreshLoginAPIView(TokenRefreshView):
+    pass
+
 
 # user registration views
+@extend_schema(tags=["Users"])
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
 
@@ -27,6 +41,7 @@ class UserRegistrationView(generics.CreateAPIView):
 
 
 # Change User Password
+@extend_schema(tags=["Users"])
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -43,6 +58,7 @@ class ChangePasswordView(APIView):
 
 
 # User Profile View
+@extend_schema(tags=["Users"])
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
@@ -52,6 +68,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
 
 # Logout View
+@extend_schema(tags=["Users"])
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
