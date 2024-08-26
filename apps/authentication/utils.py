@@ -16,8 +16,21 @@ def generate_user_token(request, user):
     return reset_link
 
 
-# send email to user
-def send_email_to_user(user, reset_link):
+# send email to user for activate account
+def email_for_activate_user_account(user, activate_link):
+    email_subject = "Activate User Account"
+    message = render_to_string(
+        "activate_user_email.html",
+        {
+            "user": user,
+            "activate_link": activate_link,
+        },
+    )
+    send_mail(email_subject, message, settings.APP_EMAIL, [user.email])
+
+
+# send email to user for reset password
+def reset_email_to_user(user, reset_link):
     email_subject = "Password Reset Request"
     message = render_to_string(
         "password_reset_email.html",

@@ -8,12 +8,18 @@ from .views import (
     CustomRefreshLoginAPIView,
     SendPasswordResetEmailView,
     PasswordRestConfirmAPIView,
+    ActivateUserAPIView,
 )
 
 
 app_name = "auth-app"
 urlpatterns = [
     path("register/", UserRegistrationView.as_view(), name="register"),
+    path(
+        "activate-account/<uidb64>/<token>/",
+        ActivateUserAPIView.as_view(),
+        name="activate-account",
+    ),
     path("login/", CustomLoginAPIView.as_view(), name="login"),
     path("login/refresh/", CustomRefreshLoginAPIView.as_view(), name="refresh"),
     path("change-password/", ChangePasswordView.as_view(), name="change-password"),
