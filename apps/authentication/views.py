@@ -21,7 +21,7 @@ from .utils import (
 )
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_decode
-
+from apps.notification.models import Notification
 
 User = get_user_model()
 
@@ -48,6 +48,10 @@ class UserRegistrationView(generics.CreateAPIView):
             # send email for user to activate account
             activate_link = generate_user_token(request, user)
             email_for_activate_user_account(user, activate_link=activate_link)
+            # send notification for user
+            Notification.objects.create(
+                user=user, message="Success Create Your Account"
+            )
             # Optionally log the user in here, or send a response indicating success
             return Response(
                 {"detail": "User registered successfully."},
@@ -73,6 +77,9 @@ class ActivateUserAPIView(generics.GenericAPIView):
 
         user.is_active = True
         user.save()
+
+        # create Success Activate Account for User
+        Notification.objects.create(user=user, message="Success Activate Your Account")
         # Optionally log the user in here, or send a response indicating success
         return Response(
             {"detail": "Activate User Account successfully."},
