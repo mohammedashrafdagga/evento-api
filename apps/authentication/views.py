@@ -1,16 +1,22 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from .serializers import (
     UserRegistrationSerializer,
     ChangePasswordSerializer,
     UserProfileSerializer,
+    PasswordResetEmailSerializer,
+    PasswordRestSerializer,
 )
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from drf_spectacular.utils import extend_schema
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.contrib.auth import get_user_model
+from .utils import generate_user_token, send_email_to_user
+
+User = get_user_model()
 
 
 @extend_schema(tags=["Users"])
@@ -42,8 +48,9 @@ class UserRegistrationView(generics.CreateAPIView):
 
 # Change User Password
 @extend_schema(tags=["Users"])
-class ChangePasswordView(APIView):
+class ChangePasswordView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
 
     def post(self, request):
         serializer = ChangePasswordSerializer(
@@ -85,3 +92,48 @@ class LogoutView(APIView):
             return Response(
                 {"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST
             )
+
+
+# rest password request APIView
+@extend_schema(tags=["Users"])
+class SendPasswordResetEmailView(generics.GenericAPIView):
+    serializer_class = PasswordResetEmailSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordResetEmailSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data["email"]
+            user = User.objects.get(email=email)
+
+            # generate Token and Send Email
+            reset_link = generate_user_token(request, user)
+            # send email to user
+            send_email_to_user(user=user, reset_link=reset_link)
+            # return Response
+            return Response(
+                {"message": "Password rest email send successfully."},
+                status.HTTP_200_OK,
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# ResetPassword
+@extend_schema(tags=["Users"])
+class PasswordRestConfirmAPIView(generics.GenericAPIView):
+    serializer_class = PasswordRestSerializer
+
+    def post(self, request, *args, **kwargs):
+
+        serializer = PasswordRestSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                uidb64 = kwargs.get("uidb64", "")
+                token = kwargs.get("token", "")
+                serializer.save(uidb64, token)
+                return Response(
+                    {"message": "Password reset successful."}, status.HTTP_200_OK
+                )
+            except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

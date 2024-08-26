@@ -58,7 +58,7 @@ ROOT_URLCONF = "src.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -78,6 +78,10 @@ AUTH_USER_MODEL = "authentication.User"
 # WSGI_APPLICATION = "src.wsgi.application"
 ASGI_APPLICATION = "src.asgi.application"
 
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# EMAIL USER TO SEND EMAIL
+APP_EMAIL = os.environ.get("APP_EMAIL", "no-reply@yourdomain.com")
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
