@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, Section
+from .models import Event, Section, Participant, WaitingList
 
 # Register your models here.
 
@@ -33,7 +33,43 @@ class SectionAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "host", "location", "start_date", "end_date")
-    search_fields = ("name", "host__username", "start_date", "end_date", "location")
-    list_filter = ("name", "location")
+    list_display = (
+        "id",
+        "name",
+        "availability",
+        "host",
+        "location",
+        "start_date",
+        "end_date",
+    )
+    search_fields = (
+        "name",
+        "availability",
+        "host__username",
+        "start_date",
+        "end_date",
+        "location",
+    )
+    list_filter = ("name", "availability", "location")
     inlines = [SectionInlineAdmin]
+
+
+@admin.register(Participant)
+class ParticipantAdmin(admin.ModelAdmin):
+    list_display = ("id", "event__name", "event__id", "user__username", "join_datetime")
+    search_fields = ("event__name", "user__username", "join_datetime")
+    list_filter = ("event__name", "user__username")
+
+
+# WaitingList
+@admin.register(WaitingList)
+class WaitingListAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "event__name",
+        "event__id",
+        "user__username",
+        "request_datetime",
+    )
+    search_fields = ("event__name", "user__username", "request_datetime")
+    list_filter = ("event__name", "user__username")

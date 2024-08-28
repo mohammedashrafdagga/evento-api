@@ -9,6 +9,7 @@ from .views import (
     SectionUpdateAPIView,
     SectionDestroyAPIView,
     JoinEventView,
+    AcceptUserAPIView,
 )
 
 
@@ -18,6 +19,8 @@ urlpatterns = [
     path("", EventListAPIView.as_view(), name="list"),
     path("create/", EventCreateAPIView.as_view(), name="create"),
     path("join/<int:pk>/", JoinEventView.as_view(), name="join_event"),
+    # For Hosting User for Event
+    path("accepted/", AcceptUserAPIView.as_view(), name="accept_user"),
     path("<int:pk>/", EventRetrieveAPIView.as_view(), name="detail"),
     path("<int:pk>/update/", EventUpdateAPIView.as_view(), name="update"),
     path("sections/create/", SectionCreateAPIView.as_view(), name="section_create"),
