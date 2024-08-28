@@ -5,12 +5,15 @@ from .serializers import (
     EventSectionSerializer,
     SectionSerializer,
     AcceptUserSerializer,
+    CategoryListSerializer,
+    CategoryDetailSerializer,
 )
 from .permissions import IsHostingUserPermission, OwnerEventPermissions
-from .models import Event, Section, Participant, WaitingList
+from .models import Event, Section, Participant, WaitingList, Category
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
+
 
 # Create your views here.
 @extend_schema(tags=["Events"])
@@ -134,3 +137,14 @@ class AcceptUserAPIView(generics.GenericAPIView):
                 status=status.HTTP_200_OK,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoryListAPIView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryListSerializer
+
+
+class CategoryDetailAPIView(generics.RetrieveAPIView):
+    queryset = Category.objects.prefetch_related("events")
+    serializer_class = CategoryDetailSerializer
+    lookup_field = "slug"

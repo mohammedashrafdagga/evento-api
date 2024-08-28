@@ -1,8 +1,13 @@
 from django.contrib import admin
 
-from .models import Event, Section, Participant, WaitingList
+from .models import Event, Section, Participant, WaitingList, Category
 
 # Register your models here.
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("name", "slug", "parent")
+    prepopulated_fields = {"slug": ("name",)}
+
 
 # Section Model
 class SectionInlineAdmin(admin.TabularInline):

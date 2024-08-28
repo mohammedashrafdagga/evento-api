@@ -1,4 +1,4 @@
-from .models import Event, Section, WaitingList, Participant
+from .models import Event, Section, WaitingList, Participant, Category
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -52,6 +52,21 @@ class SectionSerializer(serializers.ModelSerializer):
                     "The event enter not same for default event."
                 )
         return super().update(instance, validated_data)
+
+
+class EventCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = [
+            "id",
+            "name",
+            "description",
+            "location",
+            "start_date",
+            "background_image",
+            "end_date",
+            "host",
+        ]
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -147,3 +162,17 @@ class AcceptUserSerializer(serializers.Serializer):
         WaitingList.objects.filter(user=user, event=event).delete()
 
         Participant.objects.create(user=user, event=event)
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "name", "slug"]
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    events = EventCategorySerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Category
+        fields = ["id", "name", "slug", "events"]

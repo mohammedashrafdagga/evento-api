@@ -1,8 +1,28 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.utils.text import slugify
 
 User = get_user_model()
+
+
+# Category Model
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    slug = models.CharField(max_length=100, unique=True, blank=True)
+    parent = models.ForeignKey(
+        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="tags"
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name_plural = "Categories"
 
 
 # event Model
@@ -16,6 +36,13 @@ class Event(models.Model):
         on_delete=models.CASCADE,
         related_name="hosted_events",
         limit_choices_to={"user_type": "hosting"},
+    )
+    category = models.ForeignKey(
+        Category,
+        related_name="events",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
     )
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -76,7 +103,7 @@ class Participant(models.Model):
         unique_together = ("user", "event")
 
     def __str__(self):
-        return f"{self.event.name} - {self.user.username}"
+        return f"{self.event} - {self.user.username}"
 
 
 class WaitingList(models.Model):
