@@ -17,7 +17,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
         self.user_id = self.scope["url_route"]["kwargs"]["user_id"]
         self.user = await self.get_user(self.user_id)
-        print(self.user)
         if self.user is None:
             await self.close()
 

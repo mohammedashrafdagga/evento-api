@@ -7,6 +7,7 @@ from .models import User, SecurityQuestion
 class UserAdmin(BaseUserAdmin):
     # Fields to be displayed in the list view of the admin panel
     list_display = (
+        "id",
         "email",
         "first_name",
         "last_name",

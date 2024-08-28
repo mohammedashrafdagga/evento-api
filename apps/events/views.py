@@ -107,8 +107,10 @@ class JoinEventView(generics.GenericAPIView):
         # Now Adding Check if event is for all or specific
         if event.availability == "all":
             Participant.objects.create(user=user, event=event)
+            # send notification for User
         else:
             WaitingList.objects.create(user=user, event=event)
+            # send notification for User
             return Response(
                 {
                     "detail": "The event for specified people, so you adding into waiting list"
@@ -132,6 +134,7 @@ class AcceptUserAPIView(generics.GenericAPIView):
         )
         if serializer.is_valid():
             serializer.accept_user()
+            # send notification for User
             return Response(
                 {"detail": "You have been accepted to the event."},
                 status=status.HTTP_200_OK,
