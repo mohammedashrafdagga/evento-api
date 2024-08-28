@@ -1,11 +1,19 @@
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
-from .serializers import EventSerializer, EventSectionSerializer, SectionSerializer
+from .serializers import (
+    EventSerializer,
+    EventSectionSerializer,
+    SectionSerializer,
+    AcceptUserSerializer,
+    CategoryListSerializer,
+    CategoryDetailSerializer,
+)
 from .permissions import IsHostingUserPermission, OwnerEventPermissions
-from .models import Event, Section
+from .models import Event, Section, Participant, WaitingList, Category
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
+
 
 # Create your views here.
 @extend_schema(tags=["Events"])
@@ -88,16 +96,58 @@ class JoinEventView(generics.GenericAPIView):
         event = self.get_object()
         user = request.user
 
-        if event.participants.filter(id=user.id).exists():
-            raise ValidationError("You have already joined this event.")
+        if Participant.objects.filter(user=user, event=event).exists():
+            raise ValidationError(detail="You have already joined this event.")
 
         if event.host == user:
-            raise ValidationError("You cannot join an event that you are hosting.")
+            raise ValidationError(
+                detail="You cannot join an event that you are hosting."
+            )
 
-        event.participants.add(user)
-        event.save()
-
+        # Now Adding Check if event is for all or specific
+        if event.availability == "all":
+            Participant.objects.create(user=user, event=event)
+            # send notification for User
+        else:
+            WaitingList.objects.create(user=user, event=event)
+            # send notification for User
+            return Response(
+                {
+                    "detail": "The event for specified people, so you adding into waiting list"
+                },
+                status=status.HTTP_200_OK,
+            )
         return Response(
             {"detail": "You have successfully joined the event."},
             status=status.HTTP_200_OK,
         )
+
+
+# AcceptUserAPIView
+class AcceptUserAPIView(generics.GenericAPIView):
+    serializer_class = AcceptUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = AcceptUserSerializer(
+            data=request.data, context={"request": request}
+        )
+        if serializer.is_valid():
+            serializer.accept_user()
+            # send notification for User
+            return Response(
+                {"detail": "You have been accepted to the event."},
+                status=status.HTTP_200_OK,
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CategoryListAPIView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryListSerializer
+
+
+class CategoryDetailAPIView(generics.RetrieveAPIView):
+    queryset = Category.objects.prefetch_related("events")
+    serializer_class = CategoryDetailSerializer
+    lookup_field = "slug"

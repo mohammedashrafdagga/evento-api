@@ -1,4 +1,4 @@
-from .models import Event, Section
+from .models import Event, Section, WaitingList, Participant, Category
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 
@@ -52,6 +52,21 @@ class SectionSerializer(serializers.ModelSerializer):
                     "The event enter not same for default event."
                 )
         return super().update(instance, validated_data)
+
+
+class EventCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = [
+            "id",
+            "name",
+            "description",
+            "location",
+            "start_date",
+            "background_image",
+            "end_date",
+            "host",
+        ]
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -117,3 +132,47 @@ class EventSectionSerializer(EventSerializer):
             "create_at": {"read_only": True},
             "update_at": {"read_only": True},
         }
+
+
+class AcceptUserSerializer(serializers.Serializer):
+    event_id = serializers.IntegerField()
+
+    def validate(self, attrs):
+        event = None
+        try:
+            event = Event.objects.get(id=attrs["event_id"])
+        except Event.DoesNotExist:
+            raise serializers.ValidationError(detail="Event dose not exist")
+
+        user = self.context["request"].user
+
+        if not WaitingList.objects.filter(user=user, event=event).exists():
+            raise serializers.ValidationError(
+                detail="You are not on the waiting list for this event."
+            )
+        attrs["event"] = event
+        attrs["user"] = user
+
+        return attrs
+
+    def accept_user(self):
+        event = self.validated_data["event"]
+        user = self.validated_data["user"]
+
+        WaitingList.objects.filter(user=user, event=event).delete()
+
+        Participant.objects.create(user=user, event=event)
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["id", "name", "slug"]
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    events = EventCategorySerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Category
+        fields = ["id", "name", "slug", "events"]
