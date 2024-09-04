@@ -61,7 +61,14 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(Participant)
 class ParticipantAdmin(admin.ModelAdmin):
-    list_display = ("id", "event__name", "event__id", "user__username", "join_datetime")
+    list_display = (
+        "id",
+        "event__name",
+        "event__id",
+        "user__id",
+        "user__username",
+        "join_datetime",
+    )
     search_fields = ("event__name", "user__username", "join_datetime")
     list_filter = ("event__name", "user__username")
 
@@ -73,6 +80,7 @@ class WaitingListAdmin(admin.ModelAdmin):
         "id",
         "event__name",
         "event__id",
+        "user__id",
         "user__username",
         "request_datetime",
     )

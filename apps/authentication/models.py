@@ -7,6 +7,8 @@ class User(AbstractUser):
         HOSTING = "hosting", "Hosting"
         NORMAL = "normal", "Normal User"
 
+    first_name = models.CharField(max_length=25, null=False)
+    last_name = models.CharField(max_length=25, null=False)
     dob = models.DateField(null=True, blank=True)
     sex = models.CharField(
         max_length=10, choices=[("M", "Male"), ("F", "Female")], null=True, blank=True
