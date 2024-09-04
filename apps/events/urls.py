@@ -1,17 +1,18 @@
 from django.urls import path
-from .views import (
-    EventCreateAPIView,
+from .views.event import (
     EventListAPIView,
+    EventCreateAPIView,
     EventRetrieveAPIView,
     EventUpdateAPIView,
+    JoinEventAPIView,
+    AcceptUserAPIView,
+)
+from .views.category import CategoryListAPIView, CategoryDetailAPIView
+from .views.section import (
     SectionCreateAPIView,
     SectionDetailAPIView,
     SectionUpdateAPIView,
     SectionDestroyAPIView,
-    JoinEventView,
-    AcceptUserAPIView,
-    CategoryListAPIView,
-    CategoryDetailAPIView,
 )
 
 
@@ -20,7 +21,7 @@ app_name = "event-app"
 urlpatterns = [
     path("", EventListAPIView.as_view(), name="list"),
     path("create/", EventCreateAPIView.as_view(), name="create"),
-    path("join/<int:pk>/", JoinEventView.as_view(), name="join_event"),
+    path("join/<int:pk>/", JoinEventAPIView.as_view(), name="join_event"),
     # For Hosting User for Event
     path("accepted/", AcceptUserAPIView.as_view(), name="accept_user"),
     path("categories/", CategoryListAPIView.as_view(), name="category-list"),
