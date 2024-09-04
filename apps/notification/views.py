@@ -7,6 +7,7 @@ from .permissions import OwnerNotificationPermissions
 from rest_framework import status
 from rest_framework.response import Response
 from drf_spectacular.utils import extend_schema
+from .utils import NotificationService
 
 # list notifications for user have
 @extend_schema(tags=["Notifications"])
@@ -32,9 +33,9 @@ class MarkNotificationAsReadView(UpdateAPIView):
             notification = self.get_object()
         except Notification.DoesNotExist:
             raise NotFound("Notification Not Found")
+        # make the notification is read
+        NotificationService.read_notification(notification)
 
-        notification.status = Notification.NotificationStatus.READ
-        notification.save()
         return Response(
             {"detail": "Notification marked as read."}, status=status.HTTP_200_OK
         )
