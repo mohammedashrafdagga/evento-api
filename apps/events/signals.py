@@ -6,6 +6,7 @@ from .models import Section, Participant, WaitingList
 from apps.notification.models import Notification
 
 
+
 @receiver(post_save, sender=Section)
 def send_notification_to_participant(sender, instance, created, **kwargs):
     event = instance.event
@@ -35,3 +36,5 @@ def notification_for_adding_participant(sender, instance, created, **kwargs):
     )
     if created:
         Notification.objects.create(user=instance.user, message=notification_message)
+
+
