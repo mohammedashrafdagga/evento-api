@@ -3,9 +3,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.contrib.auth import get_user_model
 from .models import Notification
 from .serializers import NotificationSerializer
-from django.contrib.auth.models import AnonymousUser
 from channels.db import database_sync_to_async
-from rest_framework_simplejwt.tokens import AccessToken
 
 
 User = get_user_model()
@@ -15,18 +13,18 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     # connect Notification Consumer
     async def connect(self):
 
-        self.user_id = self.scope["url_route"]["kwargs"]["user_id"]
-        self.user = await self.get_user(self.user_id)
-        if self.user is None:
+        user_id = self.scope["url_route"]["kwargs"]["user_id"]
+        user = await self.get_user(user_id)
+
+        if not user:
             await self.close()
 
-        else:
-            self.group_name = f"user_{self.user.id}"
-            await self.channel_layer.group_add(self.group_name, self.channel_name)
-            await self.accept()
+        self.group_name = f"user_{user.id}"
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+        await self.accept()
 
-            # Fetch and send unread notifications
-            await self.fetch_and_send_notifications()
+        # Fetch and send unread notifications
+        await self.fetch_and_send_notifications(user=user)
 
     # disconnect
     async def disconnect(self, close_code):
@@ -60,11 +58,11 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     # Get Notification
     @database_sync_to_async
-    def get_notifications(self):
-        return Notification.objects.filter(user=self.user)
+    def get_notifications(self, user: User):
+        return Notification.objects.filter(user=user)
 
     # fetch Notification
-    async def fetch_and_send_notifications(self):
-        notifications = await self.get_notifications()
+    async def fetch_and_send_notifications(self, user: User):
+        notifications = await self.get_notifications(user=user)
         serialized_notifications = NotificationSerializer(notifications, many=True).data
         await self.send(text_data=json.dumps(serialized_notifications))
