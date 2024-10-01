@@ -11,6 +11,7 @@ urlpatterns = [
         "api/notifications/",
         include("apps.notification.urls", namespace="notification-app"),
     ),
+    path("api/ticket/", include("apps.ticket.urls", namespace="tickets-app")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
     path("admin/", admin.site.urls),

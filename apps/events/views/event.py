@@ -21,7 +21,6 @@ from ..utils.user_join_event import UserJoinEventServices
 class EventListAPIView(generics.ListAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
- 
 
 
 # Create your views here.

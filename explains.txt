@@ -1,0 +1,14 @@
+// Ticketing System 
+- want allow to user to create Ticketing for Events That Buy for User 
+and Can User Buy This Ticketing 
+The Idea is 
+( Host of User want To allow to people want to join in the event buy this ticket by the price She define)
+and after that Join into Events
+So Can adding into Events
+
+// Some of Transaction Will Applied
+- Now Not Have a Waiting List
+- If The User buy the tickets will adding into participants
+or can return all Ticket Seller related With Ticket with event
+
+- for User Join into Event and Buy the Ticket can Send the Notification for Are. Using Signals.

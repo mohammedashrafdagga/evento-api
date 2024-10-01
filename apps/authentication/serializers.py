@@ -50,8 +50,6 @@ class ChangePasswordSerializer(serializers.Serializer):
     def validate(self, data):
         return validate_change_password(user=self.context["request"].user, data=data)
 
-    
-
 
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,3 +86,14 @@ class PasswordRestSerializer(serializers.Serializer):
         Validate The Token , UID, match for password and confirm password
         """
         return validate_passwords(data=data)
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ("name", "username", "profile_image")
+
+    def get_name(self, obj) -> str:
+        return f"{obj.first_name} {obj.last_name}"
