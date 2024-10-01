@@ -1,11 +1,6 @@
 from apps.events.models import Event, Participant
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from apps.events.validators import (
-    validate_accept_user,
-    validate_event_exists,
-    validate_user_exists,
-)
 from .sections import SectionSerializer
 
 User = get_user_model()
@@ -54,15 +49,6 @@ class EventSerializer(serializers.ModelSerializer):
         host = self.context["request"].user
         event = Event.objects.create(host=host, **validated_data)
         return event
-
-
-class AcceptUserSerializer(serializers.Serializer):
-    event_id = serializers.IntegerField(validators=[validate_event_exists])
-    user_id = serializers.IntegerField(validators=[validate_user_exists])
-
-    def validate(self, data):
-        """Validate If User and Event in Waiting List to Accept"""
-        return validate_accept_user(data=data)
 
 
 # Event Serializer

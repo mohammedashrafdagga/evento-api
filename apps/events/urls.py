@@ -4,8 +4,6 @@ from .views.event import (
     EventCreateAPIView,
     EventRetrieveAPIView,
     EventUpdateAPIView,
-    JoinEventAPIView,
-    AcceptUserAPIView,
 )
 from .views.category import CategoryListAPIView, CategoryDetailAPIView
 from .views.section import (
@@ -21,9 +19,6 @@ app_name = "event-app"
 urlpatterns = [
     path("", EventListAPIView.as_view(), name="list"),
     path("create/", EventCreateAPIView.as_view(), name="create"),
-    path("join/<int:pk>/", JoinEventAPIView.as_view(), name="join_event"),
-    # For Hosting User for Event
-    path("accepted/", AcceptUserAPIView.as_view(), name="accept_user"),
     path("categories/", CategoryListAPIView.as_view(), name="category-list"),
     path(
         "categories/<slug:slug>/",

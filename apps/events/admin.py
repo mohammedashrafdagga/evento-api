@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, Section, Participant, WaitingList, Category
+from .models import Event, Section, Participant, Category
 
 # Register your models here.
 @admin.register(Category)
@@ -70,19 +70,4 @@ class ParticipantAdmin(admin.ModelAdmin):
         "join_datetime",
     )
     search_fields = ("event__name", "user__username", "join_datetime")
-    list_filter = ("event__name", "user__username")
-
-
-# WaitingList
-@admin.register(WaitingList)
-class WaitingListAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "event__name",
-        "event__id",
-        "user__id",
-        "user__username",
-        "request_datetime",
-    )
-    search_fields = ("event__name", "user__username", "request_datetime")
     list_filter = ("event__name", "user__username")
