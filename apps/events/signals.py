@@ -2,9 +2,8 @@
 # from asgiref.sync import async_to_sync
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from .models import Section, Participant, WaitingList
+from .models import Section, Participant
 from apps.notification.models import Notification
-
 
 
 @receiver(post_save, sender=Section)
@@ -27,14 +26,3 @@ def notification_for_adding_participant(sender, instance, created, **kwargs):
     )
     if created:
         Notification.objects.create(user=instance.user, message=notification_message)
-
-
-@receiver(post_save, sender=WaitingList)
-def notification_for_adding_participant(sender, instance, created, **kwargs):
-    notification_message = (
-        f"Your Are Adding into Waiting List for  {instance.event.name} event."
-    )
-    if created:
-        Notification.objects.create(user=instance.user, message=notification_message)
-
-

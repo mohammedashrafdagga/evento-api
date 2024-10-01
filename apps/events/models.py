@@ -104,19 +104,3 @@ class Participant(models.Model):
 
     def __str__(self):
         return f"{self.event} - {self.user.username}"
-
-
-class WaitingList(models.Model):
-    event = models.ForeignKey(
-        Event, related_name="waiting_list", on_delete=models.CASCADE
-    )
-    user = models.ForeignKey(
-        User, related_name="event_waiting_list", on_delete=models.CASCADE
-    )
-    request_datetime = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ("user", "event")
-
-    def __str__(self):
-        return f"{self.user.username} - {self.event.name}"
