@@ -1,22 +1,22 @@
 from django.urls import path
+
 from .views import (
-    UserRegistrationView,
+    ActivateUserAPIView,
     ChangePasswordView,
-    UserProfileView,
-    LogoutView,
     CustomLoginAPIView,
     CustomRefreshLoginAPIView,
-    SendPasswordResetEmailView,
+    LogoutView,
     PasswordRestConfirmAPIView,
-    ActivateUserAPIView,
+    SendPasswordResetEmailView,
+    UserProfileView,
+    UserRegistrationView,
 )
-
 
 app_name = "auth-app"
 urlpatterns = [
     path("register/", UserRegistrationView.as_view(), name="register"),
     path(
-        "activate-account/<uidb64>/<token>/",
+        "activate/<uidb64>/<token>/",
         ActivateUserAPIView.as_view(),
         name="activate-account",
     ),

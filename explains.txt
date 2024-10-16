@@ -1,0 +1,41 @@
+// Refactoring V2 (General Goal)
+- rename all api endpoint by adding v1 into path and rename depend This
+- Separation The Settings (Dev and Deployment and Test Settings Also)
+ (Using Some Library in Django)
+- Convert DB Into PostgreSQL (Dev Tool)
+- Make The Test Mysql in Sqlite Normal Also.
+- Using API endpoint Structure
+- Optimize DB Query Using DN Index and Some Tip and Track in ORM Optimize
+- Try Using Django-Debug-Toolbar
+- write test for all api endpoint
+
+
+(Authentication App) (Working On)
+- rename API endpoint (done)
+================================================================
+- create all test for all endpoint (Working on) 
+- create test for register user (Done)
+- create test for login User (Done)
+- create test for reset password ()
+- create test for change password ()
+- create test for see profile ()
+- create test for edit profile ()
+- create test for logout User ()
+================================================================
+- Using thread to incerate and optimize sending email for User (Necessary) (Done)
+- Using Threading (in Python) Done
+- convert into Using Celery (ok)
+================================================================
+- re Template all for User (Done)
+================================================================
+- can adding notifications for user when if needed (DONE)
+( - When Change Password (Sending Email or Notification) - can comment sending email)
+(- when editing any info for user can sending notification also (editing Successfully))
+(- when editing image for User Also can sending notification )
+================================================================
+- can adding some attribute Like Header and Title Or Bio for User (DONE)
+(- for Now adding Bio for User (Char (255))) DOnE
+================================================================
+- Change and Make Name for serializer Good for That purpose. (Done)
+================================================================
+- Check ALl Constrain we Have. (DONE)

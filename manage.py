@@ -2,11 +2,16 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from src.settings import base
 
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings")
+    if base.DEBUG:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings.dev")
+    else:
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings.deployment")
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

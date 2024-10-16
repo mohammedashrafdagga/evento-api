@@ -4,16 +4,27 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Account Activated Successfully</title>
+        <style>
+            /* Tailwind CSS CDN */
+            @import url("https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css");
+        </style>
     </head>
-    <body>
-        <h2>Welcome {{ user.first_name }}!</h2>
-        <p>
-            Your account has been successfully activated. You can now log in and enjoy our services.
-        </p>
-        <p>
-            If you have any questions or need further assistance, feel free to reach out to our
-            support team.
-        </p>
-        <p>Thank you for joining us,<br />Your Company Name Team</p>
+    <body class="bg-gray-100 font-sans">
+        <div class="max-w-2xl mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold text-gray-800">Welcome, {{ user.first_name }}!</h2>
+            <p class="mt-4 text-gray-600">
+                Your account has been successfully activated. You can now log in and enjoy our
+                services.
+            </p>
+            <p class="mt-6 text-gray-600">
+                If you have any questions or need further assistance, feel free to reach out to our
+                support team.
+            </p>
+            <p class="mt-8 text-gray-500 text-sm">
+                Thank you for joining us,
+                <br />
+                <span class="font-bold">Event Platforms Team</span>
+            </p>
+        </div>
     </body>
 </html>

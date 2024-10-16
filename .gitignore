@@ -5,6 +5,10 @@ __pycache__/
 
 #  static files
 static_root/
+media/
+htmlcov/
+.coverage
+
 # C extensions
 *.so
 

@@ -21,6 +21,7 @@ class User(AbstractUser):
     user_type = models.CharField(
         max_length=10, choices=UserType.choices, default=UserType.NORMAL
     )
+    bio = models.CharField(max_length=150, null=True, blank=True)
     is_active = models.BooleanField(default=False)
 
     def __str__(self):

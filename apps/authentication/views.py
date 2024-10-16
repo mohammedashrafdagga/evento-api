@@ -1,25 +1,28 @@
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status, generics
-from .serializers import (
-    UserRegistrationSerializer,
-    ChangePasswordSerializer,
-    UserProfileSerializer,
-    PasswordResetEmailSerializer,
-    PasswordRestSerializer,
-)
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from drf_spectacular.utils import extend_schema
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.auth import get_user_model
-from .utils.user_password import UserPasswordResetServices
-from apps.authentication.utils.user_register import (
-    UserRegistrationService,
-    UserActiveAccountServices,
+from drf_spectacular.utils import extend_schema
+from rest_framework import generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
+from apps.authentication.utils.active_user import activate_user_account
+from apps.authentication.utils.base import send_notification
+from apps.authentication.utils.register_user import send_register_email
+from apps.authentication.utils.change_password_user import (
+    change_user_password,
+    reset_user_password,
+    send_reset_password_email,
 )
 
+from .serializers import (
+    PasswordChangeSerializer,
+    PasswordResetEmailSerializer,
+    PasswordRestSerializer,
+    UserProfileSerializer,
+    UserRegistrationSerializer,
+)
 
 User = get_user_model()
 
@@ -43,13 +46,11 @@ class UserRegistrationView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            # send activate email and notification for user
-            UserRegistrationService.send_activation_email(request=request, user=user)
-            UserRegistrationService.create_notification(user=user)
+            # send activate email
+            send_register_email(request=request, user=user)
 
-            # Optionally log the user in here, or send a response indicating success
             return Response(
-                {"detail": "User registered successfully."},
+                {"detail": "User registered successfully. Verify your registration.."},
                 status=status.HTTP_201_CREATED,
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -59,12 +60,10 @@ class UserRegistrationView(generics.CreateAPIView):
 @extend_schema(tags=["Users"])
 class ActivateUserAPIView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
-
-        user = UserActiveAccountServices.validate_uid(kwargs.get("uidb64", ""))
-        UserActiveAccountServices.validate_token(user, kwargs.get("token", ""))
-        UserActiveAccountServices.activate_user(user)
-        UserActiveAccountServices.send_notification(user)
-        UserActiveAccountServices.activate_user_success_email(user=user)
+        # active user account and sending email and notification
+        activate_user_account(
+            uid=kwargs.get("uidb64", ""), token=kwargs.get("token", "")
+        )
         # Optionally log the user in here, or send a response indicating success
         return Response(
             {"detail": "Activate User Account successfully."},
@@ -76,19 +75,19 @@ class ActivateUserAPIView(generics.GenericAPIView):
 @extend_schema(tags=["Users"])
 class ChangePasswordView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = ChangePasswordSerializer
+    serializer_class = PasswordChangeSerializer
 
     def post(self, request):
-        serializer = ChangePasswordSerializer(
+        serializer = PasswordChangeSerializer(
             data=request.data, context={"request": request}
         )
 
         if serializer.is_valid():
-
-            UserPasswordResetServices.set_password(
+            # Success Change User Password
+            change_user_password(
                 user=request.user, new_password=serializer.validated_data["password"]
             )
-            UserPasswordResetServices.change_password_email(user=request.user)
+
             return Response(
                 {"detail": "Password updated successfully."}, status=status.HTTP_200_OK
             )
@@ -104,6 +103,17 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+    def perform_update(self, serializer):
+        user = serializer.save()
+        send_notification(
+            user=user,
+            message="Successfully Update your info",
+        )
+        return Response(
+            data=serializer.data,
+            status=status.HTTP_200_OK,
+        )
 
 
 # Logout View
@@ -137,7 +147,7 @@ class SendPasswordResetEmailView(generics.GenericAPIView):
             user = User.objects.get(email=serializer.validated_data["email"])
 
             # send password Link
-            UserPasswordResetServices.send_reset_password_email(request, user)
+            send_reset_password_email(request=request, user=user)
 
             # return Response
             return Response(
@@ -157,12 +167,11 @@ class PasswordRestConfirmAPIView(generics.GenericAPIView):
         serializer = PasswordRestSerializer(data=request.data)
         if serializer.is_valid():
             try:
-                user = UserActiveAccountServices.validate_uid(kwargs.get("uidb64", ""))
-                UserActiveAccountServices.validate_token(user, kwargs.get("token", ""))
-                UserPasswordResetServices.set_password(
-                    user, serializer.validated_data["password"]
+                reset_user_password(
+                    uid=kwargs.get("uidb64", ""),
+                    token=kwargs.get("token", ""),
+                    new_password=serializer.validated_data["password"],
                 )
-                UserPasswordResetServices.reset_password_success_email(user=user)
 
                 return Response(
                     {"message": "Password reset successful."}, status.HTTP_200_OK

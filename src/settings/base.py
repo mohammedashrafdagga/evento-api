@@ -1,24 +1,19 @@
-from pathlib import Path
-from datetime import timedelta
 import os
-from dotenv import load_dotenv
+from datetime import timedelta
+from pathlib import Path
 
+from dotenv import load_dotenv
 
 # loading env variables
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-
+# Debug
+DEBUG = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -78,21 +73,6 @@ AUTH_USER_MODEL = "authentication.User"
 ASGI_APPLICATION = "src.asgi.application"
 
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-# EMAIL USER TO SEND EMAIL
-APP_EMAIL = os.environ.get("APP_EMAIL", "no-reply@yourdomain.com")
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -127,24 +107,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static_root"
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# setup media
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
-
-
-# adding channels-redis
-CHANNEL_LAYERS = {
-    "default": {"BACKEND": "channels.layers.InMemoryChannelLayer"},
-}
 
 
 REST_FRAMEWORK = {

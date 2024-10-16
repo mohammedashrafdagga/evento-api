@@ -2,8 +2,12 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+from src.settings import base
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings")
+if base.DEBUG:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings.dev")
+else:
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "src.settings.deployment")
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 asgi_application = get_asgi_application()
