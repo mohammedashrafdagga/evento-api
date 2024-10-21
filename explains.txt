@@ -22,20 +22,11 @@
 - create test for edit profile ()
 - create test for logout User ()
 ================================================================
-- Using thread to incerate and optimize sending email for User (Necessary) (Done)
-- Using Threading (in Python) Done
-- convert into Using Celery (ok)
+Event App 
+Rebuilding event model and make abstraction class
+- increase data as 20000 Events done
+- make abstraction for event serializer done
+- create test for all endpoints
+- create test for all notification features in events Apps
+- separation features in utils file as function 
 ================================================================
-- re Template all for User (Done)
-================================================================
-- can adding notifications for user when if needed (DONE)
-( - When Change Password (Sending Email or Notification) - can comment sending email)
-(- when editing any info for user can sending notification also (editing Successfully))
-(- when editing image for User Also can sending notification )
-================================================================
-- can adding some attribute Like Header and Title Or Bio for User (DONE)
-(- for Now adding Bio for User (Char (255))) DOnE
-================================================================
-- Change and Make Name for serializer Good for That purpose. (Done)
-================================================================
-- Check ALl Constrain we Have. (DONE)

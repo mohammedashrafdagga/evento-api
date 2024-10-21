@@ -1,18 +1,7 @@
 from django.urls import path
-from .views.event import (
-    EventListAPIView,
-    EventCreateAPIView,
-    EventRetrieveAPIView,
-    EventUpdateAPIView,
-)
-from .views.category import CategoryListAPIView, CategoryDetailAPIView
-from .views.section import (
-    SectionCreateAPIView,
-    SectionDetailAPIView,
-    SectionUpdateAPIView,
-    SectionDestroyAPIView,
-)
 
+# import all views
+from .views import *
 
 app_name = "event-app"
 

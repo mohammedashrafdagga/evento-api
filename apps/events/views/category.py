@@ -1,7 +1,10 @@
-from rest_framework import generics
-from ..serializers.categories import CategoryListSerializer, CategoryDetailSerializer
-from ..models import Category
+from apps.events.models import *
+from apps.events.serializers.categories import (
+    CategoryDetailSerializer,
+    CategoryListSerializer,
+)
 from drf_spectacular.utils import extend_schema
+from rest_framework import generics
 
 
 @extend_schema(tags=["Events-Category"])
