@@ -43,3 +43,8 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        db_table = "events"
+        verbose_name = "Event"
+        verbose_name_plural = "Events"

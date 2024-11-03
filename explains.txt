@@ -24,9 +24,44 @@
 ================================================================
 Event App 
 Rebuilding event model and make abstraction class
-- increase data as 20000 Events done
-- make abstraction for event serializer done
-- create test for all endpoints
-- create test for all notification features in events Apps
-- separation features in utils file as function 
+- create test for all endpoints ()
+================================================================
+ChatApplication
+- ReDesign for Is and Make Some Normalization for That if can  ()
+- can make re test for chatting if can. ()
+================================================================
+notification
+- make test for recall all notification and make it read. ()
+================================================================
+- (Important) Some Limitation for Now, Every User can Create One Event for Testing for Now ()
+================================================================
+Trace and Make Log File for All status and How Using Here ()
+================================================================
+Ticket Application (ReDesign) (Part 2 not Refactoring )
+- allow to user to Ticket for Every Event (Free that mean 0 or not) ()
+- allow to user to buy this ticket by Processing ()
+- allow for Hosting Events statical information such as  ()
+(
+    - number of user buy this ticket ()
+    - sum amount for pay for this ticket for all user for event ()
+    
+)
+- re Design That for Now.  ()
+- Testing All Features for Now. ()
+- Try to Connection Payments Method for That. ()
+- allow to user to buy more that event for now (5) ()
+- allow to user to see in profile some information about number of events Joins ()
+========================================================
+- allow to user to register using Google for Example ()
+- allow user to login for google or email or username ()
+- allow for Hosting Adding Some Features Such Like Title, Bio, Background Image ()
+- allow for Capture ()
+========================================================
+Joining the Event
+- Generate QR Code for event when request that. ()
+- Share Qr Coding when request that. ()
+- allow user to selection some interest fields and Filter Event by that ()
+- make pagination for events ()
+================================================================
+Working and Optimize DB and Load Testing in System and Optimize That ()
 ================================================================

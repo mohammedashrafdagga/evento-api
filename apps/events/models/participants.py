@@ -31,3 +31,8 @@ class Participant(models.Model):
 
     def __str__(self):
         return f"{self.event} - {self.user.username}"
+
+    class Meta:
+        db_table = "participants"
+        verbose_name = "Participant"
+        verbose_name_plural = "Participants"

@@ -19,4 +19,6 @@ class Category(models.Model):
         return f"{self.name}"
 
     class Meta:
+        db_table = "categories"
+        verbose_name = "Category"
         verbose_name_plural = "Categories"

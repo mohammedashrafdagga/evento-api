@@ -8,13 +8,25 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # EMAIL USER TO SEND EMAIL
 APP_EMAIL = os.environ.get("APP_EMAIL", "no-reply@yourdomain.com")
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# normal data
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+# Postgresql for Development
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DEV_DB_NAME"),
+        "USER": os.environ.get("DEV_DB_USERNAME"),
+        "PASSWORD": os.environ.get("DEV_DB_PASSWORD"),
+        "HOST": os.environ.get(
+            "DEV_DB_HOST"
+        ),  # Or the IP address of your PostgreSQL server
+        "PORT": os.environ.get("DEV_DB_PORT"),  # Default PostgreSQL port
     }
 }
 
