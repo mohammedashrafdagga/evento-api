@@ -1,8 +1,8 @@
 import random
-from django.core.management.base import BaseCommand
-from apps.ticket.models import TicketSeller, Ticket
-from django.contrib.auth import get_user_model
 
+from apps.ticket.models import Ticket, TicketSeller
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
 
 User = get_user_model()
 
@@ -27,17 +27,13 @@ class Command(BaseCommand):
             return
 
         for ticket in tickets:
-            num_sellers = random.randint(1, 5)
-            for _ in range(num_sellers):
-                buyer = random.choice(
-                    users
-                )  # Randomly select a buyer from the user list
-                TicketSeller.objects.create(ticket=ticket, buyer=buyer)
-                self.stdout.write(
-                    self.style.SUCCESS(
-                        f'TicketSeller created for ticket "{ticket.title}", buyer {buyer.username}'
-                    )
+            buyer = random.choice(users)  # Randomly select a buyer from the user list
+            TicketSeller.objects.create(ticket=ticket, buyer=buyer)
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f'TicketSeller created for ticket "{ticket.title}", buyer {buyer.username}'
                 )
+            )
 
         self.stdout.write(
             self.style.SUCCESS("All ticket sellers created successfully!")

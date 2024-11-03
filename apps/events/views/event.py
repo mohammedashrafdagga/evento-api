@@ -1,16 +1,9 @@
+from apps.events.models import Event
+from apps.events.permissions import IsHostingUserPermission, OwnerEventPermissions
+from apps.events.serializers.events import EventSectionSerializer, EventSerializer
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
-from ..serializers.events import (
-    EventSerializer,
-    EventSectionSerializer,
-)
-
-from ..permissions import (
-    IsHostingUserPermission,
-    OwnerEventPermissions,
-)
-from ..models import Event
-from drf_spectacular.utils import extend_schema
 
 
 # Create your views here.

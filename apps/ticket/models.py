@@ -1,7 +1,9 @@
-from django.db import models
-from django.contrib.auth import get_user_model
-from apps.events.models import Event
 import uuid
+
+from django.contrib.auth import get_user_model
+from django.db import models
+
+from apps.events.models import Event
 
 # initialize User
 User = get_user_model()
@@ -23,6 +25,11 @@ class Ticket(models.Model):
     def __str__(self) -> str:
         return f"Ticket for Event: {self.event.name} - {self.title[:20]}"
 
+    class Meta:
+        db_table = "tickets"
+        verbose_name = "Ticket"
+        verbose_name_plural = "Tickets"
+
 
 # Ticket Seller Model for User Buy Model
 class TicketSeller(models.Model):
@@ -37,3 +44,8 @@ class TicketSeller(models.Model):
 
     def __str__(self) -> str:
         return f"Ticket for Event: {self.ticket.event.name[:20]} Buy By {self.buyer}"
+
+    class Meta:
+        db_table = "ticket_seller"
+        verbose_name = "TicketSeller"
+        verbose_name_plural = "TicketSellers"

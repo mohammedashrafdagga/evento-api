@@ -1,0 +1,67 @@
+// Refactoring V2 (General Goal)
+- rename all api endpoint by adding v1 into path and rename depend This
+- Separation The Settings (Dev and Deployment and Test Settings Also)
+ (Using Some Library in Django)
+- Convert DB Into PostgreSQL (Dev Tool)
+- Make The Test Mysql in Sqlite Normal Also.
+- Using API endpoint Structure
+- Optimize DB Query Using DN Index and Some Tip and Track in ORM Optimize
+- Try Using Django-Debug-Toolbar
+- write test for all api endpoint
+
+
+(Authentication App) (Working On)
+- rename API endpoint (done)
+================================================================
+- create all test for all endpoint (Working on) 
+- create test for register user (Done)
+- create test for login User (Done)
+- create test for reset password ()
+- create test for change password ()
+- create test for see profile ()
+- create test for edit profile ()
+- create test for logout User ()
+================================================================
+Event App 
+Rebuilding event model and make abstraction class
+- create test for all endpoints ()
+================================================================
+ChatApplication
+- ReDesign for Is and Make Some Normalization for That if can  ()
+- can make re test for chatting if can. ()
+================================================================
+notification
+- make test for recall all notification and make it read. ()
+================================================================
+- (Important) Some Limitation for Now, Every User can Create One Event for Testing for Now ()
+================================================================
+Trace and Make Log File for All status and How Using Here ()
+================================================================
+Ticket Application (ReDesign) (Part 2 not Refactoring )
+- allow to user to Ticket for Every Event (Free that mean 0 or not) ()
+- allow to user to buy this ticket by Processing ()
+- allow for Hosting Events statical information such as  ()
+(
+    - number of user buy this ticket ()
+    - sum amount for pay for this ticket for all user for event ()
+    
+)
+- re Design That for Now.  ()
+- Testing All Features for Now. ()
+- Try to Connection Payments Method for That. ()
+- allow to user to buy more that event for now (5) ()
+- allow to user to see in profile some information about number of events Joins ()
+========================================================
+- allow to user to register using Google for Example ()
+- allow user to login for google or email or username ()
+- allow for Hosting Adding Some Features Such Like Title, Bio, Background Image ()
+- allow for Capture ()
+========================================================
+Joining the Event
+- Generate QR Code for event when request that. ()
+- Share Qr Coding when request that. ()
+- allow user to selection some interest fields and Filter Event by that ()
+- make pagination for events ()
+================================================================
+Working and Optimize DB and Load Testing in System and Optimize That ()
+================================================================

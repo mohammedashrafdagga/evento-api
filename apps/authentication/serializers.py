@@ -1,16 +1,16 @@
-from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
 from .validators import (
+    validate_change_password,
     validate_email_is_exists,
     validate_email_is_not_exists,
     validate_passwords,
-    validate_change_password,
 )
-
 
 User = get_user_model()
 
-
+# ModelJobSerializer -> Way to rename serializer class
 class UserRegistrationSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(validators=[validate_email_is_exists])
     confirm_password = serializers.CharField(write_only=True)
@@ -31,26 +31,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop("confirm_password", None)
         user = User.objects.create(
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
-            email=validated_data["email"],
-            username=str(validated_data["email"]).split("@")[0],
+            first_name=str(validated_data["first_name"]).lower(),
+            last_name=str(validated_data["last_name"]).lower(),
+            email=str(validated_data["email"]).lower(),
+            username=str(validated_data["email"]).split("@")[0].lower(),
         )
         user.set_password(password)
         user.save()
         return user
 
 
-# Change user Password
-class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True)
-    confirm_password = serializers.CharField(write_only=True)
-
-    def validate(self, data):
-        return validate_change_password(user=self.context["request"].user, data=data)
-
-
+# User Profile Serializer
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -64,6 +55,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "sex",
             "user_type",
             "country",
+            "bio",
             "profile_image",
         ]
         extra_kwargs = {
@@ -71,6 +63,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "email": {"read_only": True},  # Prevent email from being updated if needed
             "user_type": {"read_only": True},
         }
+
+
+# Change user Password
+class PasswordChangeSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        return validate_change_password(user=self.context["request"].user, data=data)
 
 
 class PasswordResetEmailSerializer(serializers.Serializer):
@@ -93,7 +95,7 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("name", "username", "profile_image")
+        fields = ("name", "username", "bio", "profile_image")
 
     def get_name(self, obj) -> str:
         return f"{obj.first_name} {obj.last_name}"

@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 # Create your models here.
 
@@ -33,3 +33,8 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Notification for {self.user.username} - {self.notification_type}"
+
+    class Meta:
+        db_table = "notifications"
+        verbose_name = "Notification"
+        verbose_name_plural = "Notifications"

@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
-from .models import User, SecurityQuestion
+
+from .models import User
 
 
 class UserAdmin(BaseUserAdmin):
@@ -79,9 +80,3 @@ class UserAdmin(BaseUserAdmin):
 
 # Register the customized UserAdmin
 admin.site.register(User, UserAdmin)
-
-
-# Security Question
-@admin.register(SecurityQuestion)
-class SecurityQuestionAdmin(admin.ModelAdmin):
-    list_display = ("user__username", "question", "answer")
